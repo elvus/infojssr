@@ -4,7 +4,7 @@ const NotFoundComponent = { template: '<p>Page not found</p>' }
 
 const routes = {
     '/': 'Login',
-    '/hello': 'HelloWorld'
+    '/Principal': 'Principal'
 }
 
 const router = {

@@ -75,7 +75,7 @@
         methods:{
             login(){
                 if (this.usuario==="admin" && this.password==="admin") {
-                    window.location.href='/hello'
+                    window.location.href='/Principal'
                 }else{
                     this.active = true
                 }
