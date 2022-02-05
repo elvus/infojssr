@@ -8,48 +8,50 @@
   </nav>
   <div class="content">
     <div class="box">
-      <div class="field">
-        <label class="label">Timbrado</label>
-        <div class="control">
-          <input class="input" type="text" v-model="timbrado"/>
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Periodo</label>
-        <div class="control">
-          <div class="box">
-            <div class="columns">
-              <div class="column">
-                <label class="label">Desde</label>
-                <input class="input" type="date" v-model="fecha_inicio"/>
-              </div>
-              <div class="column">
-                <label class="label">Hasta</label>
-                <input class="input" type="date" v-model="fecha_fin"/>
-              </div>
-          </div>
+      <form @submit.prevent="onSubmit">
+        <div class="field">
+          <label class="label">Timbrado</label>
+          <div class="control">
+            <input class="input" type="text" v-model="timbrado" required/>
           </div>
         </div>
-      </div>
-      <div class="field">
-        <label class="label">Formato</label>
-        <div class="control">
-          <label class="radio">
-            <input type="radio" name="Formato" value="1" v-model="formato"> Formato 1
-          </label>
-          <label class="radio">
-            <input type="radio" name="Formato" value="2" v-model="formato"> Formato 2
-          </label>
+        <div class="field">
+          <label class="label">Periodo</label>
+          <div class="control">
+            <div class="box">
+              <div class="columns">
+                <div class="column">
+                  <label class="label">Desde</label>
+                  <input class="input" type="date" placeholder="dd/mm/yyyy" v-model="fecha_inicio" required/>
+                </div>
+                <div class="column">
+                  <label class="label">Hasta</label>
+                  <input class="input" type="date" placeholder="dd/mm/yyyy" v-model="fecha_fin" required/>
+                </div>
+            </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-success" @click.prevent="generarDocumento">Generar</button>
+        <div class="field">
+          <label class="label">Formato</label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="Formato" value="1" v-model="formato"> Formato 1
+            </label>
+            <label class="radio">
+              <input type="radio" name="Formato" value="2" v-model="formato"> Formato 2
+            </label>
+          </div>
         </div>
-        <div class="control">
-          <button class="button is-success is-light">Salir</button>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-success" type="submit">Generar</button>
+          </div>
+          <div class="control">
+            <button class="button is-success is-light" @click.prevent="salir">Salir</button>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>  
 </template>
@@ -65,18 +67,30 @@ export default {
     formato: "1",
   }),
   methods:{
-    generarDocumento(){
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent("hola :3"));
-        element.setAttribute('download', "800.csv");
-
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
+    onSubmit(){
+       getData("http://localhost:8080/api/v1/document", {
+         timbrado: this.timbrado,
+         fecha_inicio: this.fecha_inicio,
+         fecha_fin: this.fecha_fin
+       }, this.$cookies.get("auth-token")).then(data =>{
+         console.log(data)
+       })
+    },
+    salir(){
+      window.location.href = "/"
     }
   }
+}
+
+const getData = async (url='', data={}, token)=> {
+  const response = await fetch(url,{
+    method:"POST",
+    headers:{
+      "Authorization": token,
+      'Content-Type': 'application/json'
+    },
+    body:JSON.stringify(data)
+  })
+  return response.json()
 }
 </script>

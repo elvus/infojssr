@@ -14,8 +14,17 @@ const router = {
 
     computed: {
         ViewComponent(){
-            const matchingPage = routes[this.currentRoute] || NotFoundComponent
-            return require(`../components/${matchingPage}.vue`).default
+            if(routes[this.currentRoute]!=="Login"){
+                if (this.$cookies.isKey("auth-token")){
+                    const matchingPage = routes[this.currentRoute] || NotFoundComponent
+                    return require(`../components/${matchingPage}.vue`).default
+                }
+            }else{
+                this.$cookies.remove("auth-token")
+                const matchingPage = routes[this.currentRoute] || NotFoundComponent
+                return require(`../components/${matchingPage}.vue`).default
+            }
+            
         }
     },
 
