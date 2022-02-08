@@ -59,6 +59,8 @@
 @import "~bulma/css/bulma.css";
 </style>
 <script>
+
+let xlsx = require('json-as-xlsx')
 export default {
   data:() => ({
     timbrado:"",
@@ -68,12 +70,33 @@ export default {
   }),
   methods:{
     onSubmit(){
-       getData("http://localhost:8080/api/v1/document", {
+      let url = "http://localhost:8080/api/v1/"
+      let today = new Date()
+      let now = today.getDate()+""+(today.getMonth()+1)+""+today.getFullYear()+"_"+today.getHours()+""+today.getMinutes()+""+today.getSeconds()
+      url = this.formato === "1" ? url+"marangatu":url+"document" 
+       getData(url, {
          timbrado: this.timbrado,
          fecha_inicio: this.fecha_inicio,
          fecha_fin: this.fecha_fin
        }, this.$cookies.get("auth-token")).then(data =>{
-         console.log(data)
+         let columns =[]
+         Object.keys(data[0]).forEach((i)=>{
+           columns.push({
+             label: i,
+             value: i
+           })
+         })
+          let dat = [
+          {
+            sheet: 'Marangatu',
+            columns: columns,
+            content: data
+          }
+        ]
+        let settings = {
+          fileName: '80061620_'+now
+        }
+        xlsx(dat, settings)
        })
     },
     salir(){
@@ -82,15 +105,17 @@ export default {
   }
 }
 
-const getData = async (url='', data={}, token)=> {
+const getData = async (url='', data={}, auth)=> {
   const response = await fetch(url,{
     method:"POST",
     headers:{
-      "Authorization": token,
+      "Authorization": auth,
       'Content-Type': 'application/json'
     },
     body:JSON.stringify(data)
   })
   return response.json()
 }
+
+
 </script>
