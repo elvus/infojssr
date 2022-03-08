@@ -80,8 +80,8 @@
                 }).then(data =>{
                     if(data){
                         this.active = false;
-                        this.$cookies.set('auth-token', data.token)
-                        window.location.href='/Principal'
+                        localStorage.setItem('auth-token', data.token)
+                        window.location.href='#/Principal'
                     }else{
                         this.active = true;
                     }

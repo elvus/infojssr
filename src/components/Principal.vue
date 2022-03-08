@@ -59,7 +59,6 @@
 @import "~bulma/css/bulma.css";
 </style>
 <script>
-
 let xlsx = require('json-as-xlsx')
 export default {
   data:() => ({
@@ -78,25 +77,30 @@ export default {
          timbrado: this.timbrado,
          fecha_inicio: this.fecha_inicio,
          fecha_fin: this.fecha_fin
-       }, this.$cookies.get("auth-token")).then(data =>{
+       }, localStorage.getItem("auth-token")).then(data =>{
          let columns =[]
-         Object.keys(data[0]).forEach((i)=>{
-           columns.push({
-             label: i,
-             value: i
-           })
-         })
-          let dat = [
-          {
-            sheet: 'Marangatu',
-            columns: columns,
-            content: data
-          }
-        ]
-        let settings = {
-          fileName: '80061620_'+now
-        }
-        xlsx(dat, settings)
+				if(data.length){
+					Object.keys(data[0]).forEach((i)=>{
+						columns.push({
+							label: i,
+							value: i
+						})
+					})
+						let dat = [
+						{
+							sheet: 'Marangatu',
+							columns: columns,
+							content: data
+						}
+					]
+					let settings = {
+						fileName: '80061620_'+now
+					}
+					xlsx(dat, settings)
+				}else{
+					alert("No se encontraron datos");
+				}
+         
        })
     },
     salir(){
@@ -104,7 +108,6 @@ export default {
     }
   }
 }
-
 const getData = async (url='', data={}, auth)=> {
   const response = await fetch(url,{
     method:"POST",
@@ -116,6 +119,4 @@ const getData = async (url='', data={}, auth)=> {
   })
   return response.json()
 }
-
-
 </script>

@@ -4,7 +4,8 @@ const NotFoundComponent = { template: '<p>Page not found</p>' }
 
 const routes = {
     '/': 'Login',
-    '/Principal': 'Principal'
+    '#/Principal': 'Principal',
+    '/index.html': 'Login'
 }
 
 const router = {
@@ -13,18 +14,17 @@ const router = {
     }),
 
     computed: {
-        ViewComponent(){
+        ViewComponent(){            
             if(routes[this.currentRoute]!=="Login"){
-                if (this.$cookies.isKey("auth-token")){
+                if (localStorage.getItem("auth-token")){
                     const matchingPage = routes[this.currentRoute] || NotFoundComponent
                     return require(`../components/${matchingPage}.vue`).default
                 }
             }else{
-                this.$cookies.remove("auth-token")
+                localStorage.removeItem("auth-token")
                 const matchingPage = routes[this.currentRoute] || NotFoundComponent
                 return require(`../components/${matchingPage}.vue`).default
             }
-            
         }
     },
 
@@ -34,7 +34,7 @@ const router = {
 
     created () {
         window.addEventListener('popstate', () => {
-            this.currentRoute = window.location.pathname
+            this.currentRoute = window.location.hash
         })
     }
 
