@@ -74,34 +74,10 @@
         }),
         methods:{
             onSubmit(){
-                auth("http://localhost:8080/api/v1/login",{
-                    alias_usuario: this.usuario,
-                    pass_usuario: this.password
-                }).then(data =>{
-                    if(data){
-                        this.active = false;
-                        localStorage.setItem('auth-token', data.token)
-                        window.location.href='#/Principal'
-                    }else{
-                        this.active = true;
-                    }
-                })
+                if(this.usuario=="admin" && this.password=="admin"){
+                    window.location.href='#/Principal'
+                }
             }            
         }
-    }
-
-    const auth = async (url ="", data={})=>{
-        const response = await fetch(url, {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify(data)
-        })
-        if(response.ok){
-            return response.json()
-        }
-
-        return;
     }
 </script>

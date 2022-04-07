@@ -69,15 +69,14 @@ export default {
   }),
   methods:{
     onSubmit(){
-      let url = "http://localhost:8080/api/v1/"
+      let url = "http://localhost:8080/api/v1/marangatu"
       let today = new Date()
-      let now = today.getDate()+""+(today.getMonth()+1)+""+today.getFullYear()+"_"+today.getHours()+""+today.getMinutes()+""+today.getSeconds()
-      url = this.formato === "1" ? url+"marangatu":url+"document" 
+      let now = today.getDate()+""+(today.getMonth()+1)+""+today.getFullYear()+"_"+today.getHours()+""+today.getMinutes()+""+today.getSeconds() 
        getData(url, {
          timbrado: this.timbrado,
          fecha_inicio: this.fecha_inicio,
          fecha_fin: this.fecha_fin
-       }, localStorage.getItem("auth-token")).then(data =>{
+       }).then(data =>{
          let columns =[]
 				if(data.length){
 					Object.keys(data[0]).forEach((i)=>{
@@ -94,7 +93,7 @@ export default {
 						}
 					]
 					let settings = {
-						fileName: '80061620_'+now
+						fileName: '3582662_'+now
 					}
 					xlsx(dat, settings)
 				}else{
@@ -108,11 +107,10 @@ export default {
     }
   }
 }
-const getData = async (url='', data={}, auth)=> {
+const getData = async (url='', data={})=> {
   const response = await fetch(url,{
     method:"POST",
     headers:{
-      "Authorization": auth,
       'Content-Type': 'application/json'
     },
     body:JSON.stringify(data)

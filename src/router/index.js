@@ -16,12 +16,9 @@ const router = {
     computed: {
         ViewComponent(){            
             if(routes[this.currentRoute]!=="Login"){
-                if (localStorage.getItem("auth-token")){
-                    const matchingPage = routes[this.currentRoute] || NotFoundComponent
-                    return require(`../components/${matchingPage}.vue`).default
-                }
+                const matchingPage = routes[this.currentRoute] || NotFoundComponent
+                return require(`../components/${matchingPage}.vue`).default
             }else{
-                localStorage.removeItem("auth-token")
                 const matchingPage = routes[this.currentRoute] || NotFoundComponent
                 return require(`../components/${matchingPage}.vue`).default
             }
