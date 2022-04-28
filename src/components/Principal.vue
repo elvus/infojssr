@@ -38,9 +38,6 @@
             <label class="radio">
               <input type="radio" name="Formato" value="1" v-model="formato"> Formato 1
             </label>
-            <label class="radio">
-              <input type="radio" name="Formato" value="2" v-model="formato"> Formato 2
-            </label>
           </div>
         </div>
         <div class="field is-grouped">
